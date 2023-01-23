@@ -1,5 +1,7 @@
 package AutomatedTellerMachine;
 
+import java.util.Scanner;
+
 public class Deposit {
 	
 

@@ -24,7 +24,7 @@ public class Main {
 		boolean flag = true;
 		boolean check = false;
 		CustomerCreation comp = null;
-		id = id();
+		id();
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		
@@ -39,10 +39,9 @@ public class Main {
 			}
 		}
 		if(flag == true) {
-//			in.nextLine();
-			System.out.print("Enter Pass : ");
+			in.nextLine();
 			String Pass = in.nextLine();
-			check = (comp.getPass().equals(Pass));
+			check = (comp.getPass() == Pass);
 		}
 		else {
 			System.out.println("The entered ID is not our customer.");
@@ -80,7 +79,7 @@ public class Main {
 					System.out.println("Press 2 for Withdrawal.");
 					System.out.println("Press 3 for Balance.");
 					
-//					int b = in.nextInt();
+					int b = in.nextInt();
 					
 //					switch(b) {
 //						case 1:

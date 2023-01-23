@@ -4,14 +4,16 @@ import java.util.*;
 
 public class Main {
 	static int id;
+//	static Scanner in = new Scanner(System.in);
 	static ArrayList<CustomerCreation> Customers = new ArrayList<>();
 	
 	public static int id() {
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 			try {
-				System.out.println("Enter ID: ");
+				System.out.println("Enter Your ID: ");
 				id = in.nextInt();
+				return id;
 			}
 			catch(Exception e){
 				System.out.println("Please enter valid id(Datatype int).");
@@ -20,36 +22,6 @@ public class Main {
 		return id;
 	}
 
-	public static boolean Authentication() {
-		boolean flag = true;
-		boolean check = false;
-		CustomerCreation comp = null;
-		id = id();
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		
-		for(CustomerCreation i : Customers) {
-			if(i.getId() == id) {
-				flag = true;
-				comp = i;
-				break;
-			}
-			else {
-				flag = false;
-			}
-		}
-		if(flag == true) {
-//			in.nextLine();
-			System.out.print("Enter Pass : ");
-			String Pass = in.nextLine();
-			check = (comp.getPass().equals(Pass));
-		}
-		else {
-			System.out.println("The entered ID is not our customer.");
-		}
-		return check;
-	}
-	
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
 		boolean flag = true;
@@ -75,21 +47,7 @@ public class Main {
 				count++;
 			}
 			else if(a == 2) {
-				if(Authentication() == true) {
-					System.out.println("Press 1 for Deposit.");
-					System.out.println("Press 2 for Withdrawal.");
-					System.out.println("Press 3 for Balance.");
-					
-//					int b = in.nextInt();
-					
-//					switch(b) {
-//						case 1:
-//							Deposit dep = new Deposit();
-					
-					}
-				else {
-					Authentication();
-				}
+				
 			}
 			else {
 				System.out.print("Thank you");

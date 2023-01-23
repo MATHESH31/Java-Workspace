@@ -39,10 +39,9 @@ public class Main {
 			}
 		}
 		if(flag == true) {
-//			in.nextLine();
-			System.out.print("Enter Pass : ");
+			in.nextLine();
 			String Pass = in.nextLine();
-			check = (comp.getPass().equals(Pass));
+			check = (comp.getPass() == Pass);
 		}
 		else {
 			System.out.println("The entered ID is not our customer.");
