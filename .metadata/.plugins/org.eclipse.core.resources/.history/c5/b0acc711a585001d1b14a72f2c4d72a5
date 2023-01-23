@@ -1,0 +1,33 @@
+package Practice;
+
+import java.util.*;
+
+public class game_2046 {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+        int a = in.nextInt();
+        List<List<String>> temp = new ArrayList<>();
+        for (int i = 0;i<a;i++){
+            System.out.println("input?");
+            String[] mun = in.nextLine().split(" ");
+            List<String> num = new ArrayList<>(Arrays.asList(mun));
+//            num = Arrays.asList(mun);
+            System.out.println(num);
+            temp.add(num);
+            System.out.println(temp);
+        }
+//        for (int i=0;i<a;i++){
+//        int sqr_num = 1;
+//        int start = Integer.parseInt(temp.get(i).get(0))+(sqr_num * Integer.parseInt(temp.get(i).get(1)));
+//            for(int j=1;j<=Integer.parseInt(temp.get(i).get(2));j++){
+//                System.out.print(start + "\s");
+//                sqr_num *= 2;
+//                start += (sqr_num * Integer.parseInt(temp.get(i).get(1)));
+//            }
+//        }
+		in.close();
+
+	}
+
+}

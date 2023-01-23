@@ -1,0 +1,19 @@
+package Practice;
+
+import java.util.*;
+
+public class Tables {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+        int a = in.nextInt();
+        int b = 0;
+        for(int i=1;i<=10;i++){
+            b += a;
+            System.out.println(a+" x "+i+" = "+b);
+        }
+        in.close();
+
+	}
+
+}

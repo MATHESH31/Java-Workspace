@@ -1,0 +1,30 @@
+package Practice;
+
+import java.util.*;
+
+public class AmoebaMultiplication {
+
+	public static void main(String args[]) {
+		Scanner in = new Scanner(System.in);
+      	int month = in.nextInt();
+        int result = 0;
+      	int temp1 = 0;
+      	int temp2 = 1;
+      	
+        if(month == 1){
+          System.out.println(temp1);
+        }
+        else if(month == 2){
+          System.out.println(temp2);
+        }
+        else if(month>2){
+          for(int i = 2;i>month;++i){
+            result = temp1 + temp2;
+            temp1 = temp2;
+            temp2 = result;
+          }
+          System.out.println(result);
+        }
+      in.close();
+	}
+}

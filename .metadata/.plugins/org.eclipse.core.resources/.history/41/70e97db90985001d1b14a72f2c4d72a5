@@ -1,0 +1,33 @@
+package Practice;
+
+import java.util.*;
+
+public class game_2046 {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		/* int a = in.nextInt(); */ 
+		String[] b = in.nextLine().split(" ");
+		String[] c = in.nextLine().split(" ");
+		
+		int d = 1; 
+		int e = Integer.parseInt(b[0])+(d*Integer.parseInt(b[1])); 
+		for(int i=1;i<=Integer.parseInt(b[2]);i++){ 
+			System.out.print(e); 
+			d *= 2; 
+			e += (d*Integer.parseInt(b[1])); 
+			}
+		 System.out.println();
+
+		int d1 = 1;
+		int e1 = Integer.parseInt(c[0]) + (d1 * Integer.parseInt(c[1]));
+		for (int i = 1; i <= Integer.parseInt(c[2]); i++) {
+			System.out.print(e1);
+			d1 *= 2;
+			e1 += (d1 * Integer.parseInt(c[1]));
+		}
+		in.close();
+
+	}
+
+}

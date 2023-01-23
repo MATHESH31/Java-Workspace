@@ -1,0 +1,24 @@
+package Practice;
+
+import java.util.*;
+import java.util.regex.*;
+
+public class RegexDup {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+        Pattern p = Pattern.compile("\\b(\\w+)\\b\\s+\\b\\1\\b",Pattern.CASE_INSENSITIVE);
+        int n = in.nextInt();
+        in.nextLine();
+        for(int i = 0;i<n;i++){
+            String input = in.nextLine();
+            Matcher m = p.matcher(input);
+            while(m.find()){
+                input = input.replaceAll(m.group(),m.group(1));
+            }
+            System.out.println(input);
+        }
+        in.close();
+	}
+
+}

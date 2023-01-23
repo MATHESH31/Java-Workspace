@@ -1,0 +1,25 @@
+package Practice;
+
+import java.util.*;
+
+public class Output_Formating {
+	public static void main(String [] args) {
+		Scanner in = new Scanner(System.in);
+		List<List<String>> ttemp = new ArrayList<>();
+		for(int i=0;i<3;i++) {
+			List<String> temp = new ArrayList<>();
+			String[] word = in.nextLine().split(" ");
+			temp = Arrays.asList(word);
+			System.out.println(temp);
+			ttemp.add(temp);
+			System.out.println(ttemp);
+		}
+		System.out.println("================================");
+		for(int a=0;a<3;a++) {
+			System.out.printf("%-15s%03d %n",ttemp.get(a).get(0),Integer.parseInt(ttemp.get(a).get(1)));
+		}
+		System.out.println("================================");
+		in.close();
+	}
+
+}

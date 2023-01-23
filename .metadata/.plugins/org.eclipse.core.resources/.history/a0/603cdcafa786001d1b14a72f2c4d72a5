@@ -1,0 +1,24 @@
+package Practice;
+
+import java.util.*;
+
+public class RegexToken {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+        String s = in.nextLine().trim().replaceAll(" +"," ");
+        List<String>sarr = Arrays.asList(s.split("[ !,?._'@]+"));
+        if(sarr == null) {
+        	System.out.println(0);
+        }
+        else {
+	        System.out.println(sarr.size());
+	        for(String str : sarr){
+	            System.out.println(str);
+	        }
+        }
+        in.close();
+
+	}
+
+}

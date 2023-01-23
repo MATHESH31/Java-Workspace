@@ -1,0 +1,16 @@
+package Practice;
+
+import java.text.NumberFormat;
+import java.util.*;
+
+public class NumberFormatter {
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("hi", "IN"));
+		int a = in.nextInt();
+		System.out.println(formatter.format(a));
+
+	}
+
+}
