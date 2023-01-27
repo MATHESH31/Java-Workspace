@@ -1,0 +1,186 @@
+package AutomatedTellerMachine;
+
+import java.util.*;
+
+public class Main {
+	static int id;
+	static ArrayList<CustomerCreation> Customers = new ArrayList<>();
+	static ArrayList<Deposit> dep_details = new ArrayList<>();
+	static ArrayList<Withdrawal> wid_details = new ArrayList<>();
+	static ArrayList<TransactionHistory> transaction = new ArrayList<>();
+
+	public static int id() {
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		try {
+			System.out.print("Enter ID: ");
+			id = in.nextInt();
+		} catch (Exception e) {
+			System.out.println("Please enter valid id(Datatype int).");
+			id();
+		}
+		return id;
+	}
+
+	public static boolean Authentication() {
+		boolean flag = true;
+		boolean check = false;
+		CustomerCreation comp = null;
+		id = id();
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+
+		for (CustomerCreation i : Customers) {
+			if (i.getId() == id) {
+				flag = true;
+				comp = i;
+				break;
+			} else {
+				flag = false;
+			}
+		}
+		if (flag == true) {
+			System.out.print("Enter Pass : ");
+			String Pass = in.nextLine();
+			check = (comp.getPass().equals(Pass));
+		} else {
+			System.out.println("The entered ID is not our customer.");
+		}
+		return check;
+	}
+
+	public static int Validation() {
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		int num = 0;
+		try {
+			System.out.print("Please Enter your choice : ");
+			num = in.nextInt();
+		}
+		catch(Exception e) {
+			System.out.println("Please enter a number.");
+			Validation();
+		}
+		return num;
+	}
+
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		int dep_amount = 0;
+		int wid_amount = 0;
+		int balance = 0;
+		TransactionHistory last = null;
+		boolean flag = true;
+		int count = 0;
+		while (flag) {
+			System.out.println("Press 1 for create account.\nPress 2 for existing account.\nPress 0 for exit.");
+
+			int a = Validation();
+			System.out.println(a);
+
+			if (a == 1) {
+				id = id();
+				System.out.print("Enter Your Name: ");
+				in.nextLine();
+				String name = in.nextLine();
+				System.out.print("Enter Your Password: ");
+				String pass = in.next();
+				CustomerCreation cc = new CustomerCreation(id, name, pass, balance);
+				Deposit dep = new Deposit(id, 0);
+				dep_details.add(dep);
+				Withdrawal wid = new Withdrawal(id, 0);
+				wid_details.add(wid);
+				Customers.add(cc);
+				System.out.println("Your account has been created.");
+				System.out.println(Customers.get(count).toString());
+				count++;
+
+			} else if (a == 2) {
+				if (Authentication() == true) {
+					System.out.println(
+							"Press 1 for Deposit.\nPress 2 for Withdrawal.\nPress 3 for Balance.\nPress 4 to see transactions.");
+
+					int b = Validation();
+
+					switch (b) {
+					case 1:
+						String transaction_type = "Deposit";
+						System.out.print("Enter the amount to deposit : ");
+						dep_amount = in.nextInt();
+						for (Deposit i : dep_details) {
+							if (i.getId() == id) {
+								balance += dep_amount;
+								i.setAmount(balance);
+								System.out.println("Amount deposited successfully.");
+								System.out.println(i.toString());
+								break;
+							}
+						}
+						TransactionHistory trans = new TransactionHistory(id, transaction_type, dep_amount, balance);
+						transaction.add(trans);
+						last = transaction.get(transaction.size() - 1);
+						System.out.println(last.toString());
+						break;
+
+					case 2:
+						String transaction_type1 = "Withdrawal";
+						System.out.print("Enter the amount to withdraw : ");
+						wid_amount = in.nextInt();
+						for (Withdrawal i : wid_details) {
+							if (i.getId() == id) {
+								balance -= wid_amount;
+								i.setAmount(balance);
+								System.out.println("Please collect your cash from the dispenser.");
+								System.out.println(i.toString());
+							}
+						}
+						if (balance > 0) {
+							trans = new TransactionHistory(id, transaction_type1, wid_amount, balance);
+							transaction.add(trans);
+							last = transaction.get(transaction.size() - 1);
+							System.out.println(last.toString());
+						} else {
+							System.out.println("Insufficient balance.");
+						}
+						break;
+
+					case 3:
+						for (TransactionHistory i : transaction) {
+							if (i.getId() == id) {
+								balance = i.getAmount();
+							}
+						}
+						Balance bal = new Balance(id, balance);
+						System.out.println(bal.toString());
+						break;
+
+					case 4:
+						if (transaction.size() > 0) {
+							for (TransactionHistory i : transaction) {
+								if (i.getId() == id) {
+									System.out.println(transaction.toString());
+									break;
+								}
+							}
+							System.out.println("These are your transactions.");
+						} else {
+							System.out.println("You have done no transactions.");
+						}
+					default:
+						System.out.println("Please check your input");
+					}
+				} else {
+					System.out.println(
+							"The credentials given have no match in the system.\nPlease enter a valid ID and Password.\n");
+					Authentication();
+				}
+			} else {
+				System.out.println("Thank you");
+				flag = false;
+			}
+		}
+		in.close();
+
+	}
+
+}

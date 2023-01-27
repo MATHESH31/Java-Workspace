@@ -4,7 +4,17 @@ public class Withdrawal {
 
 	private int id;
 	private int amount;
-	private int withdrawAmount;
+	
+	public Withdrawal(int id, int amount) {
+		this.id = id;
+		this.amount = amount;
+	}
+
+	@Override
+	public String toString() {
+		return "Withdrawal [id = " + id + ", amount = " + amount + "]";
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -16,18 +26,6 @@ public class Withdrawal {
 	}
 	public void setAmount(int amount) {
 		this.amount = amount;
-	}
-	public int getWithdrawAmount() {
-		return withdrawAmount;
-	}
-	public void setWithdrawAmount(int withdrawAmount) {
-		this.withdrawAmount = withdrawAmount;
-	}
-	public Withdrawal(int id, int amount, int withdrawAmount) {
-		super();
-		this.id = id;
-		this.amount = amount;
-		this.withdrawAmount = withdrawAmount;
 	}
 	
 }
