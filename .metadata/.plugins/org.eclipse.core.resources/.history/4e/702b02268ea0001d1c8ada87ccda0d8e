@@ -143,7 +143,7 @@ public class Main {
 						
 						for(CustomerCreation i : Customers) {
 							if(i.getId() == id) {
-								i.setBalance(balance);
+								balance = i.setBalance(balance);
 							}
 						}
 						
@@ -158,7 +158,7 @@ public class Main {
 						System.out.print("Enter the amount to withdraw : ");
 						wid_amount = Amount();
 						for (Withdrawal i : wid_details) {
-							if (i.getId() == id && balance > 0) {
+							if (i.getId() == id && i.getAmount() > wid_amount) {
 								balance -= wid_amount;
 								i.setAmount(balance);
 								System.out.println("Please collect your cash from the dispenser.");
@@ -169,13 +169,6 @@ public class Main {
 								break;
 							}
 						}
-						
-						for(CustomerCreation i : Customers) {
-							if(i.getId() == id) {
-								i.setBalance(balance);
-							}
-						}
-						
 						if (balance > 0) {
 							trans = new TransactionHistory(id, transaction_type1, wid_amount, balance);
 							transaction.add(trans);
@@ -208,7 +201,6 @@ public class Main {
 						}
 					case 5:
 						ATM();
-						break;
 					default:
 						System.out.println("Please check your input");
 					}

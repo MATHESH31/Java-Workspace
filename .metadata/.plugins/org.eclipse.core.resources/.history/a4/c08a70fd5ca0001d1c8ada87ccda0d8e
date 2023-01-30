@@ -52,8 +52,15 @@ public class Main {
 		}
 		else {
 			System.out.println("The ID does not exist.");
-			ATM();
+			check = Authentication(idList);
 		}
+
+//		if (flag == true) {
+//			System.out.print("Enter Pass : ");
+//			String Pass = in.nextLine();
+//			check = (comp.getPass().equals(Pass));
+//		}
+		
 		return check;
 	}
 
@@ -77,6 +84,7 @@ public class Main {
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		try {
+			System.out.print("Please Enter the amount : ");
 			num = in.nextInt();
 
 		} catch (Exception e) {
@@ -87,7 +95,6 @@ public class Main {
 	}
 	
 	public static void ATM() {
-		Scanner in = new Scanner(System.in);
 		while (flag) {
 			System.out.println("Press 1 for create account.\nPress 2 for existing account.\nPress 0 for exit.");
 
@@ -101,7 +108,7 @@ public class Main {
 					String name = in.nextLine();
 					System.out.print("Enter Your Password: ");
 					String pass = in.nextLine();
-					CustomerCreation cc = new CustomerCreation(id, name, pass, 0);
+					CustomerCreation cc = new CustomerCreation(id, name, pass, balance);
 					Deposit dep = new Deposit(id, 0);
 					dep_details.add(dep);
 					Withdrawal wid = new Withdrawal(id, 0);
@@ -116,11 +123,6 @@ public class Main {
 
 			} else if (a == 2) {
 				if (Authentication(idList) == true) {
-					for(CustomerCreation i : Customers) {
-						if(i.getId() == id) {
-							balance = i.getBalance();
-						}
-					}
 					System.out.println(
 							"Press 1 for Deposit.\nPress 2 for Withdrawal.\nPress 3 for Balance.\nPress 4 to see transactions.\nPress 5 to go back");
 
@@ -140,13 +142,6 @@ public class Main {
 								break;
 							}
 						}
-						
-						for(CustomerCreation i : Customers) {
-							if(i.getId() == id) {
-								i.setBalance(balance);
-							}
-						}
-						
 						TransactionHistory trans = new TransactionHistory(id, transaction_type, dep_amount, balance);
 						transaction.add(trans);
 						last = transaction.get(transaction.size() - 1);
@@ -158,29 +153,20 @@ public class Main {
 						System.out.print("Enter the amount to withdraw : ");
 						wid_amount = Amount();
 						for (Withdrawal i : wid_details) {
-							if (i.getId() == id && balance > 0) {
+							if (i.getId() == id) {
 								balance -= wid_amount;
 								i.setAmount(balance);
 								System.out.println("Please collect your cash from the dispenser.");
 								System.out.println(i.toString());
 							}
-							else {
-								System.out.println("Insufficeint Balance.");
-								break;
-							}
 						}
-						
-						for(CustomerCreation i : Customers) {
-							if(i.getId() == id) {
-								i.setBalance(balance);
-							}
-						}
-						
 						if (balance > 0) {
 							trans = new TransactionHistory(id, transaction_type1, wid_amount, balance);
 							transaction.add(trans);
 							last = transaction.get(transaction.size() - 1);
 							System.out.println(last.toString());
+						} else {
+							System.out.println("Insufficient balance.");
 						}
 						break;
 
@@ -206,9 +192,6 @@ public class Main {
 						} else {
 							System.out.println("You have done no transactions.");
 						}
-					case 5:
-						ATM();
-						break;
 					default:
 						System.out.println("Please check your input");
 					}
@@ -216,16 +199,23 @@ public class Main {
 				else {
 					System.out.println(
 							"The credentials given have no match in the system.\nPlease enter a valid ID and Password.\n");
+					
 				}
 			} else {
 				System.out.println("Thank you");
 				flag = false;
 			}
 		}
-		in.close();
 	}
 
 	public static void main(String[] args) {
-		ATM();
+		Scanner in = new Scanner(System.in);
+
+		
+
+		
+		in.close();
+
 	}
+
 }

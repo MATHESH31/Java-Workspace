@@ -1,15 +1,19 @@
 package AutomatedTellerMachine;
 
-public class Deposit {
-	
+public class Withdrawal {
+
 	private int id;
 	private int amount;
 	
-	public Deposit(int id,int amount) {
+	public Withdrawal(int id, int amount) {
 		this.id = id;
 		this.amount = amount;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Withdrawal [id = " + id + ", amount = " + amount + "]";
+	}
 
 	public int getId() {
 		return id;
@@ -24,10 +28,4 @@ public class Deposit {
 		this.amount = amount;
 	}
 	
-	@Override
-	public String toString() {
-		return "[id = " + id + ", amount = " + amount + "]";
-	}
-	
-
 }

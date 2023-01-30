@@ -10,7 +10,7 @@ public class CustomerCreation {
 			this.id = id;
 			this.name = name;
 			this.pass = pass;
-			this.balance = balance;
+			this.setBalance(balance);
 		}
 		
 		public int getId() {

@@ -12,7 +12,7 @@ public class Withdrawal {
 
 	@Override
 	public String toString() {
-		return "Withdrawal [id = " + id + ", amount = " + amount + "]";
+		return "[id = " + id + ", amount = " + amount + "]";
 	}
 
 	public int getId() {

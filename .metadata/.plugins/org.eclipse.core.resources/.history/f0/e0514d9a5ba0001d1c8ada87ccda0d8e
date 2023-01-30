@@ -41,7 +41,7 @@ public class TransactionHistory {
 
 	@Override
 	public String toString() {
-		return "[id = " + id + ", transcation_type = " + transcation_type + ", dep_wid = " + dep_wid
+		return " [id = " + id + ", transcation_type = " + transcation_type + ", dep_wid = " + dep_wid
 				+ ", amount = " + amount + "]\n";
 	}
 }
