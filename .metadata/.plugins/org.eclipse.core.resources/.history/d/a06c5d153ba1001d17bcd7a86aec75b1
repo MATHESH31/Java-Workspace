@@ -87,8 +87,6 @@ public class Main {
 	}
 
 	public static void Operations() {
-		int confirm = 0;
-		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		System.out.println(
 				"Press 1 for Deposit.\nPress 2 for Withdrawal.\nPress 3 for Balance.\nPress 4 to see transactions.\nPress 5 to go back");
@@ -98,7 +96,7 @@ public class Main {
 		switch (b) {
 		case 1:
 			System.out.println("Press 1 to continue.\nPress 0 to go back");
-			confirm = in.nextInt();
+			int confirm = in.nextInt();
 			if(confirm == 1) {
 				String transaction_type = "Deposit";
 				dep_amount = Amount();
@@ -132,41 +130,31 @@ public class Main {
 			break;
 
 		case 2:
-			System.out.println("Press 1 to continue.\nPress 0 to go back");
-			confirm = in.nextInt();
-			if(confirm == 1) {
-				String transaction_type1 = "Withdrawal";
-				wid_amount = Amount();
-				for (Withdrawal i : wid_details) {
-					if (i.getId() == id && balance > 0 && balance >= wid_amount) {
-						balance -= wid_amount;
-						i.setAmount(balance);
-						System.out.println("Please collect your cash from the dispenser.");
-						System.out.println(i.toString());
-					} else {
-						System.out.println("Insufficeint Balance.");
-						break;
-					}
-				}
-	
-				for (CustomerCreation i : Customers) {
-					if (i.getId() == id) {
-						i.setBalance(balance);
-					}
-				}
-	
-				if (balance >= 0) {
-					TransactionHistory trans = new TransactionHistory(id, transaction_type1, wid_amount, balance);
-					transaction.add(trans);
-					last = transaction.get(transaction.size() - 1);
-					System.out.println(last.toString());
+			String transaction_type1 = "Withdrawal";
+			wid_amount = Amount();
+			for (Withdrawal i : wid_details) {
+				if (i.getId() == id && balance > 0 && balance >= wid_amount) {
+					balance -= wid_amount;
+					i.setAmount(balance);
+					System.out.println("Please collect your cash from the dispenser.");
+					System.out.println(i.toString());
+				} else {
+					System.out.println("Insufficeint Balance.");
+					break;
 				}
 			}
-			else if(confirm == 0) {
-				Operations();
+
+			for (CustomerCreation i : Customers) {
+				if (i.getId() == id) {
+					i.setBalance(balance);
+				}
 			}
-			else {
-				System.out.println("Please check your input.");
+
+			if (balance >= 0) {
+				trans = new TransactionHistory(id, transaction_type1, wid_amount, balance);
+				transaction.add(trans);
+				last = transaction.get(transaction.size() - 1);
+				System.out.println(last.toString());
 			}
 			break;
 
@@ -210,7 +198,6 @@ public class Main {
 			if (a == 1) {
 				System.out.println("Press 1 to continue.\nPress 0 to go back");
 				int confirm = in.nextInt();
-				in.nextLine();
 				if (confirm == 1) {
 					id = id();
 					if (idList.contains(id) == false) {
@@ -238,27 +225,16 @@ public class Main {
 				}
 
 			} else if (a == 2) {
-				System.out.println("Press 1 to continue.\nPress 0 to go back");
-				int confirm = in.nextInt();
-				in.nextLine();
-				if (confirm == 1) {
-					if (Authentication(idList) == true) {
-						for (CustomerCreation i : Customers) {
-							if (i.getId() == id) {
-								balance = i.getBalance();
-							}
+				if (Authentication(idList) == true) {
+					for (CustomerCreation i : Customers) {
+						if (i.getId() == id) {
+							balance = i.getBalance();
 						}
-						Operations();
-					} else {
-						System.out.println(
-								"The credentials given have no match in the system.\nPlease enter a valid ID and Password.\n");
 					}
-				}
-				else if(confirm == 0) {
-					ATM();
-				}
-				else {
-					System.out.println("Please check your input.");
+					Operations();
+				} else {
+					System.out.println(
+							"The credentials given have no match in the system.\nPlease enter a valid ID and Password.\n");
 				}
 			} else if (a == 0) {
 				System.out.println("Thank you");

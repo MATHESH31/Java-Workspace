@@ -210,7 +210,6 @@ public class Main {
 			if (a == 1) {
 				System.out.println("Press 1 to continue.\nPress 0 to go back");
 				int confirm = in.nextInt();
-				in.nextLine();
 				if (confirm == 1) {
 					id = id();
 					if (idList.contains(id) == false) {
@@ -238,27 +237,16 @@ public class Main {
 				}
 
 			} else if (a == 2) {
-				System.out.println("Press 1 to continue.\nPress 0 to go back");
-				int confirm = in.nextInt();
-				in.nextLine();
-				if (confirm == 1) {
-					if (Authentication(idList) == true) {
-						for (CustomerCreation i : Customers) {
-							if (i.getId() == id) {
-								balance = i.getBalance();
-							}
+				if (Authentication(idList) == true) {
+					for (CustomerCreation i : Customers) {
+						if (i.getId() == id) {
+							balance = i.getBalance();
 						}
-						Operations();
-					} else {
-						System.out.println(
-								"The credentials given have no match in the system.\nPlease enter a valid ID and Password.\n");
 					}
-				}
-				else if(confirm == 0) {
-					ATM();
-				}
-				else {
-					System.out.println("Please check your input.");
+					Operations();
+				} else {
+					System.out.println(
+							"The credentials given have no match in the system.\nPlease enter a valid ID and Password.\n");
 				}
 			} else if (a == 0) {
 				System.out.println("Thank you");
