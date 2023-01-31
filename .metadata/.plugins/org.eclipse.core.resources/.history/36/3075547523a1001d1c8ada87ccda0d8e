@@ -77,7 +77,6 @@ public class Main {
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		try {
-			System.out.print("Please enter an amount : ");
 			num = in.nextInt();
 
 		} catch (Exception e) {
@@ -130,6 +129,7 @@ public class Main {
 					switch (b) {
 					case 1:
 						String transaction_type = "Deposit";
+						System.out.print("Enter the amount to deposit : ");
 						dep_amount = Amount();
 						for (Deposit i : dep_details) {
 							if (i.getId() == id) {
@@ -155,9 +155,10 @@ public class Main {
 
 					case 2:
 						String transaction_type1 = "Withdrawal";
+						System.out.print("Enter the amount to withdraw : ");
 						wid_amount = Amount();
 						for (Withdrawal i : wid_details) {
-							if (i.getId() == id && balance > 0 && balance > wid_amount) {
+							if (i.getId() == id && balance > 0) {
 								balance -= wid_amount;
 								i.setAmount(balance);
 								System.out.println("Please collect your cash from the dispenser.");
