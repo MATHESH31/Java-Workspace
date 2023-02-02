@@ -1,0 +1,27 @@
+package DB_Java;
+
+import java.util.List;
+import java.util.Scanner;
+import com.mongodb.*;
+import com.mongodb.MongoClient;
+
+
+public class MongoJava {
+	public static void main(String []args) throws Exception {
+		Scanner in = new Scanner(System.in);
+		try {
+			MongoClient mongoClient = new MongoClient("localhost",27017);
+			List<String> dbs = mongoClient.getDatabaseNames();
+			System.out.println(dbs);
+			String dbinput = in.nextLine();
+			DB db = mongoClient.getDB(dbinput);
+			Set<String> collections = db.getCollectionNames();
+			System.out.println(collections);
+			String colinput = in.nextLine();
+			DBCollection coll = db.getCollection(colinput);
+			
+		} catch(Exception e) {
+			System.out.println("Error");
+		}
+	}
+}

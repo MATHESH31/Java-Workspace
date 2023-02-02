@@ -1,0 +1,11 @@
+/**
+ * 
+ */
+/**
+ * @author mathesh.n
+ *
+ */
+module Pilot {
+	requires mongodb.java.driver;
+	requires java.sql;
+}

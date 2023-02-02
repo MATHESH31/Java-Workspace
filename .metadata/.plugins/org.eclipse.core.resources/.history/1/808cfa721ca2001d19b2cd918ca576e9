@@ -1,0 +1,43 @@
+package DB_Java;
+
+import java.util.ArrayList;
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class MongoJavaLocal {
+	static MongoClient mc = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
+	static MongoDatabase db = mc.getDatabase("Javadb");
+
+	
+	public static void Crud() {
+		MongoCollection <Document> currcol = db.getCollection("Javacol");
+		
+		
+	}
+
+	public static void main(String[] args) throws Exception {
+		try {
+			mc = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
+			db = mc.getDatabase("Javadb");
+			System.out.println("Database connected.");
+			boolean check = db.listCollectionNames().into(new ArrayList<>()).contains("javacol");
+			if(check == true) {
+				Crud();
+			}
+			else {
+				System.out.println("Collection doesn't exist.");
+//				db.createCollection("Javacol");
+				System.out.println("Collection created successfully.");
+				Crud();
+				mc.close();
+			}
+		} catch(Exception e) {
+			System.out.println("Database connection failed.");
+		}
+	}
+
+}

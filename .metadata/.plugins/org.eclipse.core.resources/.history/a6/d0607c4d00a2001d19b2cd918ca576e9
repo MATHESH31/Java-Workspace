@@ -1,0 +1,19 @@
+package DB_Java;
+
+import java.util.List;
+import java.util.Set;
+
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+
+public class MongoJava2 {
+
+	public static void main(String[] args) {
+		MongoClient mc = new MongoClient("localhost",27017);
+		DB db = mc.getDB("Javadb");
+		Set<String> dbs = db.getCollectionNames();
+		System.out.println(dbs);
+
+	}
+
+}

@@ -1,0 +1,79 @@
+package DB_Java;
+
+import java.util.*;
+
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Updates.*;
+import com.mongodb.client.MongoDatabase;
+
+public class MongoJavaLocal {
+	static MongoClient mc = new MongoClient("localhost", 27017);
+	static MongoDatabase db = mc.getDatabase("Javadb");
+
+	public static Bson file(String name, int age, int phone, String address) {
+		Bson Name = set("name", name);
+		Bson Age = set("age", age);
+		Bson Phone = set("phone", phone);
+		Bson Address = set("address", address);
+		Bson com = combine(Name, Age, Phone, Address);
+		return com;
+
+	}
+
+	public static void Crud() {
+		Scanner in = new Scanner(System.in);
+		MongoCollection<Document> currcol = db.getCollection("Javacol");
+		System.out.println(
+				"Press 1 to Insert data.\nPress 2 to Read data.\nPress 3 to Update data.\nPress 4 to Delete data.");
+		int a = in.nextInt();
+
+		switch (a) {
+		// Create document
+		case 1:
+			System.out.print("Enter your name : ");
+			String name = in.nextLine();
+			System.out.print("Enter your age : ");
+			int age = in.nextInt();
+			System.out.print("Enter your phone number : ");
+			int phone = in.nextInt();
+			System.out.print("Enter your address : ");
+			String address = in.nextLine();
+			currcol.insertOne((Document) file(name, age, phone, address));
+
+		case 2:
+			FindIterable<Document> temp = currcol.find();
+			System.out.println(temp);
+		}
+
+		in.close();
+
+	}
+
+	public static void main(String[] args) throws Exception {
+		try {
+			mc = new MongoClient("localhost", 27017);
+			db = mc.getDatabase("Javadb");
+			System.out.println("Database connected.");
+			ArrayList<String> collections = db.listCollectionNames().into(new ArrayList<>());
+			boolean check = collections.contains("Javacol");
+			if (check == true) {
+				Crud();
+			} else {
+				System.out.println("Collection doesn't exist.");
+				db.createCollection("Javacol");
+				System.out.println("Collection created successfully.");
+				Crud();
+
+				mc.close();
+			}
+		} catch (Exception e) {
+			System.out.println("Database connection failed.");
+		}
+	}
+
+}

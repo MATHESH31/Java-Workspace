@@ -1,0 +1,22 @@
+package DB_Java;
+
+import java.util.Iterator;
+import org.bson.Document;
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+
+public class MongoJava {
+	public static void main(String []args) throws Exception {
+		
+		try {
+			MongoClient mongoClient = new MongoClient("localhost",27017);
+			List<String> dbs = mongoClient.getDatabaseNames();
+			System.out.println(dbs);
+		} catch(Exception e) {
+			System.out.println("Error");
+		}
+	}
+}

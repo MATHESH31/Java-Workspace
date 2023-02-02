@@ -1,0 +1,95 @@
+package DB_Java;
+
+import java.util.*;
+
+import org.bson.Document;
+
+import com.mongodb.DBCursor;
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class MongoJavaLocal {
+	static MongoClient mc = new MongoClient("localhost", 27017);
+	static MongoDatabase db = mc.getDatabase("Javadb");
+	
+	public static Document file(String name,int age, long phone, String address) {
+		Document doc = new Document("Name",name).append("Age",age).append("Phone",phone).append("Address",address);
+		return doc;
+	}
+
+//	public static Bson file(String name, int age, long phone, String address) {
+//		Bson Name = set("name", name);
+//		Bson Age = set("age", age);
+//		Bson Phone = set("phone", phone);
+//		Bson Address = set("address", address);
+//		Bson com = combine(Name, Age, Phone, Address);
+//		return com;
+//
+//	}
+
+	public static void Crud() {
+		Scanner in = new Scanner(System.in);
+		MongoCollection<Document> currcol = db.getCollection("Javacol");
+		System.out.println(
+				"Press 1 to Insert data.\nPress 2 to Read data.\nPress 3 to Update data.\nPress 4 to Delete data.");
+		System.out.print("Enter your choice : ");
+		int a = in.nextInt();
+		in.nextLine();
+
+		switch (a) {
+		// Create document
+		case 1:
+			System.out.print("Enter your name : ");
+			String name = in.nextLine();
+			System.out.print("Enter your age : ");
+			int age = in.nextInt();
+			System.out.print("Enter your phone number : ");
+			long phone = in.nextLong();
+			in.nextLine();
+			System.out.print("Enter your address : ");
+			String address = in.nextLine();
+			currcol.insertOne(file(name,age,phone,address));
+			System.out.println("Document inserted.");
+			break;
+
+		// Read document
+		case 2:
+			FindIterable <Document> doc = currcol.find();
+			Iterator<Document> it = doc.iterator();
+			while(it.hasNext()) {
+				System.out.println(it.next());
+			}
+			
+		// Update document
+		case 3:
+			
+		}
+		in.close();
+	}
+
+	public static void main(String[] args) throws Exception {
+		try {
+			mc = new MongoClient("localhost", 27017);
+			db = mc.getDatabase("Javadb");
+			System.out.println("Database connected.");
+			ArrayList<String> collections = db.listCollectionNames().into(new ArrayList<>());
+			boolean check = collections.contains("Javacol");
+			if (check == true) {
+				Crud();
+			} else {
+				System.out.println("Collection doesn't exist.");
+				db.createCollection("Javacol");
+				System.out.println("Collection created successfully.");
+				Crud();
+
+				mc.close();
+				System.out.println("Database disconnected.");
+			}
+		} catch (Exception e) {
+			System.out.println("Database connection failed.");
+		}
+	}
+
+}
