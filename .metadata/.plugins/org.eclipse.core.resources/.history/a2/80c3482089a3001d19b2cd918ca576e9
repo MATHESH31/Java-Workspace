@@ -6,7 +6,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import static com.mongodb.client.model.Updates.*;
-import static com.mongodb.client.model.Filters.*;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -15,15 +14,14 @@ import com.mongodb.client.MongoDatabase;
 public class MongoJavaLocal {
 	static MongoClient mc = new MongoClient("localhost", 27017);
 	static MongoDatabase db = mc.getDatabase("Javadb");
-	static List <Integer> ids = new ArrayList<>();
 
-	public static Document file(int id,String name, int age, long phone, String address) {
-		Document doc = new Document("id",id).append("Name", name).append("Age", age).append("Phone", phone).append("Address", address);
+	public static Document file(String name, int age, long phone, String address) {
+		Document doc = new Document("Name", name).append("Age", age).append("Phone", phone).append("Address", address);
 		return doc;
 	}
 	
 	public static String Capitalize(String name) {
-		return name = name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
+		return name = name.substring(0,1).toUpperCase();
 	}
 
 	public static void Crud() {
@@ -41,19 +39,6 @@ public class MongoJavaLocal {
 			switch (a) {
 			// Create document
 			case 1:
-				boolean flag1 = true;
-				int id = 0;
-				while(flag1) {
-					System.out.println("Enter an ID : ");
-					id = in.nextInt();					
-					if(ids.contains(id)) {
-						System.out.println("This id exist.");
-					}
-					else {
-						flag = false;
-					}
-				}
-				ids.add(id);
 				System.out.print("Enter your name : ");
 				String name = in.nextLine();
 				System.out.print("Enter your age : ");
@@ -63,7 +48,7 @@ public class MongoJavaLocal {
 				in.nextLine();
 				System.out.print("Enter your address : ");
 				String address = in.nextLine();
-				currcol.insertOne(file(id,name, age, phone, address));
+				currcol.insertOne(file(name, age, phone, address));
 				System.out.println("Document inserted.");
 				break;
 
@@ -78,13 +63,68 @@ public class MongoJavaLocal {
 
 			// Update document
 			case 3:
-				
+				System.out.print("Enter the match field : ");
+				String mat_field = in.nextLine();
+				System.out.print("Enter value of the match field : ");
+				String mat_value = in.nextLine();
+
 				System.out.print("Enter Update field : ");
 				String upd_field = in.nextLine();
 				System.out.print("Enter Update value : ");
 				String upd_value = in.nextLine();
 
-				
+				if (mat_field == "Name" || mat_field == "Address") {
+					if (upd_field == "Name" || upd_field == "Address") {
+						Bson match = set(mat_field, mat_value);
+						Bson update = set(upd_field, upd_value);
+						currcol.updateOne(match, update);
+					} else if (upd_field == "Age") {
+						Bson match = set(mat_field, mat_value);
+						Bson update = set(upd_field, String.valueOf(upd_value));
+						currcol.updateOne(match, update);
+					} else if (upd_field == "Phone") {
+						Bson match = set(mat_field, mat_value);
+						Bson update = set(upd_field, Long.parseLong(upd_value));
+						currcol.updateOne(match, update);
+					} else {
+						System.out.println("Please check your input.");
+					}
+
+				} else if (mat_field == "Age") {
+					if (upd_field == "Name" || upd_field == "Address") {
+						Bson match = set(mat_field, String.valueOf(mat_value));
+						Bson update = set(upd_field, upd_value);
+						currcol.updateOne(match, update);
+					} else if (upd_field == "Age") {
+						Bson match = set(mat_field, String.valueOf(mat_value));
+						Bson update = set(upd_field, String.valueOf(upd_value));
+						currcol.updateOne(match, update);
+					} else if (upd_field == "Phone") {
+						Bson match = set(mat_field, String.valueOf(mat_value));
+						Bson update = set(upd_field, Long.parseLong(upd_value));
+						currcol.updateOne(match, update);
+					} else {
+						System.out.println("Please check your input.");
+					}
+				} else if (mat_field == "Phone") {
+					if (upd_field == "Name" || upd_field == "Address") {
+						Bson match = set(mat_field, Long.parseLong(mat_value));
+						Bson update = set(upd_field, upd_value);
+						currcol.updateOne(match, update);
+					} else if (upd_field == "Age") {
+						Bson match = set(mat_field, Long.parseLong(mat_value));
+						Bson update = set(upd_field, String.valueOf(upd_value));
+						currcol.updateOne(match, update);
+					} else if (upd_field == "Phone") {
+						Bson match = set(mat_field, Long.parseLong(mat_value));
+						Bson update = set(upd_field, Long.parseLong(upd_value));
+						currcol.updateOne(match, update);
+					} else {
+						System.out.println("Please check your input.");
+					}
+				} else {
+					System.out.println("Please check your input.");
+				}
 				break;
 
 			// Remove document
@@ -94,17 +134,17 @@ public class MongoJavaLocal {
 				System.out.println("Enter the field value : ");
 				String del_value = in.nextLine();
 				
-				if(Capitalize(del_field).equals("Name") || Capitalize(del_field).equals("Address")) {
+				if(del_field == "Name" || del_field == "Address") {
 					Bson del = set(del_field,del_value);
-					currcol.deleteOne(eq(del));
+					currcol.deleteOne(del);
 				}
-				else if(Capitalize(del_field).equals("Age") ) {
+				else if(del_field == "Age") {
 					Bson del = set(del_field,String.valueOf(del_value));
-					currcol.deleteOne(eq(del));
+					currcol.deleteOne(del);
 				}
-				else if(Capitalize(del_field).equals("Phone")) {
+				else if(del_field == "Phone") {
 					Bson del = set(del_field,Long.parseLong(del_value));
-					currcol.deleteOne(eq(del));
+					currcol.deleteOne(del);
 				}
 				break;
 				
@@ -112,7 +152,6 @@ public class MongoJavaLocal {
 			case 0:
 				flag = false;
 				System.out.println("Program ended.");
-				break;
 
 				// default message
 			default:

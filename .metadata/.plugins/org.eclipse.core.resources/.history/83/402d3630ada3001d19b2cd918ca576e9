@@ -47,10 +47,10 @@ public class MongoJavaLocal {
 					System.out.println("Enter an ID : ");
 					id = in.nextInt();					
 					if(ids.contains(id)) {
-						System.out.println("This id exist.");
+						continue;
 					}
 					else {
-						flag = false;
+						System.out.println("This id exist.");
 					}
 				}
 				ids.add(id);
@@ -78,13 +78,68 @@ public class MongoJavaLocal {
 
 			// Update document
 			case 3:
-				
+				System.out.print("Enter the match field : ");
+				String mat_field = in.nextLine();
+				System.out.print("Enter value of the match field : ");
+				String mat_value = in.nextLine();
+
 				System.out.print("Enter Update field : ");
 				String upd_field = in.nextLine();
 				System.out.print("Enter Update value : ");
 				String upd_value = in.nextLine();
 
-				
+				if (Capitalize(mat_field).equals("Name") || Capitalize(mat_field).equals("Address")) {
+					if (Capitalize(upd_field).equals("Name") || Capitalize(upd_field).equals("Address")) {
+						Bson match = set(mat_field, mat_value);
+						Bson update = set(upd_field, upd_value);
+						currcol.updateOne(eq(match),update);
+					} else if (Capitalize(upd_field).equals("Age")) {
+						Bson match = set(mat_field, mat_value);
+						Bson update = set(upd_field, String.valueOf(upd_value));
+						currcol.updateOne(eq(match), update);
+					} else if (Capitalize(upd_field).equals("Phone")) {
+						Bson match = set(mat_field, mat_value);
+						Bson update = set(upd_field, Long.parseLong(upd_value));
+						currcol.updateOne(eq(match), update);
+					} else {
+						System.out.println("Please check your input.");
+					}
+
+				} else if (Capitalize(mat_field).equals("Age")) {
+					if (Capitalize(upd_field).equals("Name") || Capitalize(upd_field).equals("Address")) {
+						Bson match = set(mat_field, String.valueOf(mat_value));
+						Bson update = set(upd_field, upd_value);
+						currcol.updateOne(eq(match), update);
+					} else if (Capitalize(upd_field).equals("Age")) {
+						Bson match = set(mat_field, String.valueOf(mat_value));
+						Bson update = set(upd_field, String.valueOf(upd_value));
+						currcol.updateOne(eq(match), update);
+					} else if (Capitalize(upd_field).equals("Phone")) {
+						Bson match = set(mat_field, String.valueOf(mat_value));
+						Bson update = set(upd_field, Long.parseLong(upd_value));
+						currcol.updateOne(eq(match), update);
+					} else {
+						System.out.println("Please check your input.");
+					}
+				} else if (Capitalize(mat_field).equals("Phone")) {
+					if (Capitalize(upd_field).equals("Name") || Capitalize(upd_field).equals("Address")) {
+						Bson match = set(mat_field, Long.parseLong(mat_value));
+						Bson update = set(upd_field, upd_value);
+						currcol.updateOne(eq(match), update);
+					} else if (Capitalize(upd_field).equals("Age")) {
+						Bson match = set(mat_field, Long.parseLong(mat_value));
+						Bson update = set(upd_field, String.valueOf(upd_value));
+						currcol.updateOne(eq(match), update);
+					} else if (Capitalize(upd_field).equals("Phone")) {
+						Bson match = set(mat_field, Long.parseLong(mat_value));
+						Bson update = set(upd_field, Long.parseLong(upd_value));
+						currcol.updateOne(eq(match), update);
+					} else {
+						System.out.println("Please check your input.");
+					}
+				} else {
+					System.out.println("Please check your input.");
+				}
 				break;
 
 			// Remove document
