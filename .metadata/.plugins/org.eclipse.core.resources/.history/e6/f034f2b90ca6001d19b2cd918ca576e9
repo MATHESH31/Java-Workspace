@@ -141,11 +141,9 @@ public class Main {
 						balance -= wid_amount;
 						i.setAmount(balance);
 						System.out.println("Please collect your cash from the dispenser.");
-						status = "Success";
 						System.out.println(i.toString());
 					} else {
 						System.out.println("Insufficeint Balance.");
-						status = "Failed";
 						break;
 					}
 				}

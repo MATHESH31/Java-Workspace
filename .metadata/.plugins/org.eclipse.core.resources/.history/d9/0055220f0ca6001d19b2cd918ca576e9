@@ -6,16 +6,14 @@ public class TransactionHistory {
 	private String transcation_type;
 	private int dep_wid;
 	private int amount;
-	private String status;
 	
-	public TransactionHistory(int id,String transaction_type,int dep_wid,int amount,String status) {
+	public TransactionHistory(int id,String transaction_type,int dep_wid,int amount) {
 		this.id = id;
 		this.transcation_type = transaction_type;
 		this.dep_wid = dep_wid;
 		this.amount = amount;
-		this.status = status;
 	}
-
+	
 	public int getId() {
 		return id;
 	}
@@ -40,16 +38,10 @@ public class TransactionHistory {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
 
 	@Override
 	public String toString() {
 		return "[id = " + id + ", transcation_type = " + transcation_type + ", dep_wid = " + dep_wid
-				+ ", current balance = " + amount + ", status = " + status + "]\n";
+				+ ", current balance = " + amount + "]\n";
 	}
 }

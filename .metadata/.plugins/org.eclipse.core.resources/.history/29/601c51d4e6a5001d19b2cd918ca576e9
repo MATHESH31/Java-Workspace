@@ -88,7 +88,6 @@ public class Main {
 
 	public static void Operations() {
 		int confirm = 0;
-		String status = "";
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		System.out.println(
@@ -100,7 +99,7 @@ public class Main {
 		case 1:
 			System.out.println("Press 1 to continue.\nPress 0 to go back");
 			confirm = in.nextInt();
-			if (confirm == 1) {
+			if(confirm == 1) {
 				String transaction_type = "Deposit";
 				dep_amount = Amount();
 				for (Deposit i : dep_details) {
@@ -112,20 +111,22 @@ public class Main {
 						break;
 					}
 				}
-
+	
 				for (CustomerCreation i : Customers) {
 					if (i.getId() == id) {
 						i.setBalance(balance);
 					}
 				}
-
-				TransactionHistory trans = new TransactionHistory(id, transaction_type, dep_amount, balance, status);
+	
+				TransactionHistory trans = new TransactionHistory(id, transaction_type, dep_amount, balance);
 				transaction.add(trans);
 				last = transaction.get(transaction.size() - 1);
 				System.out.println(last.toString());
-			} else if (confirm == 0) {
+			}
+			else if(confirm == 0) {
 				Operations();
-			} else {
+			}
+			else {
 				System.out.println("Please check your input.");
 			}
 			break;
@@ -133,7 +134,7 @@ public class Main {
 		case 2:
 			System.out.println("Press 1 to continue.\nPress 0 to go back");
 			confirm = in.nextInt();
-			if (confirm == 1) {
+			if(confirm == 1) {
 				String transaction_type1 = "Withdrawal";
 				wid_amount = Amount();
 				for (Withdrawal i : wid_details) {
@@ -141,30 +142,30 @@ public class Main {
 						balance -= wid_amount;
 						i.setAmount(balance);
 						System.out.println("Please collect your cash from the dispenser.");
-						status = "Success";
 						System.out.println(i.toString());
 					} else {
 						System.out.println("Insufficeint Balance.");
-						status = "Failed";
 						break;
 					}
 				}
-
+	
 				for (CustomerCreation i : Customers) {
 					if (i.getId() == id) {
 						i.setBalance(balance);
 					}
 				}
-
+	
 				if (balance >= 0) {
-					TransactionHistory trans = new TransactionHistory(id, transaction_type1, wid_amount, balance, status);
+					TransactionHistory trans = new TransactionHistory(id, transaction_type1, wid_amount, balance);
 					transaction.add(trans);
 					last = transaction.get(transaction.size() - 1);
 					System.out.println(last.toString());
 				}
-			} else if (confirm == 0) {
+			}
+			else if(confirm == 0) {
 				Operations();
-			} else {
+			}
+			else {
 				System.out.println("Please check your input.");
 			}
 			break;
@@ -207,8 +208,8 @@ public class Main {
 			int a = Validation();
 
 			if (a == 1) {
+				boolean emptystr = true;
 				String name = "";
-				String pass = "";
 				System.out.println("Press 1 to continue.\nPress 0 to go back");
 				int confirm = in.nextInt();
 				in.nextLine();
@@ -216,28 +217,14 @@ public class Main {
 					id = id();
 					if (idList.contains(id) == false) {
 						idList.add(id);
-						while (true) {
-							if (name.length() == 0) {
+						while(emptystr) {
+							if(name.length() > 0) {
 								System.out.print("Enter Your Name: ");
 								name = in.nextLine().trim();
-								System.out.println((name.length() > 0) ? "name accepted" : "The name cannot be accepted.");
-								name = name.replaceAll("\\s+", " ");
-							} else {
-								break;
 							}
 						}
-
-						while (true) {
-							if (pass.length() == 0) {
-								System.out.print("Enter Your Password: ");
-								pass = in.nextLine().trim();
-								System.out.println((pass.length() > 0) ? "password accepted" : "The password cannot be accepted.");
-								pass = pass.replaceAll("\\s+", " ");
-							} else {
-								break;
-							}
-						}
-
+						System.out.print("Enter Your Password: ");
+						String pass = in.nextLine().trim();
 						CustomerCreation cc = new CustomerCreation(id, name, pass, 0);
 						Deposit dep = new Deposit(id, 0);
 						dep_details.add(dep);
@@ -272,9 +259,11 @@ public class Main {
 						System.out.println(
 								"The credentials given have no match in the system.\nPlease enter a valid ID and Password.\n");
 					}
-				} else if (confirm == 0) {
+				}
+				else if(confirm == 0) {
 					ATM();
-				} else {
+				}
+				else {
 					System.out.println("Please check your input.");
 				}
 			} else if (a == 0) {

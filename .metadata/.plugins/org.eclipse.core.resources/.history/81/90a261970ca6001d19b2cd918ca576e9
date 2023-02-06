@@ -119,7 +119,7 @@ public class Main {
 					}
 				}
 
-				TransactionHistory trans = new TransactionHistory(id, transaction_type, dep_amount, balance, status);
+				TransactionHistory trans = new TransactionHistory(id, transaction_type, dep_amount, balance,status);
 				transaction.add(trans);
 				last = transaction.get(transaction.size() - 1);
 				System.out.println(last.toString());
@@ -141,11 +141,9 @@ public class Main {
 						balance -= wid_amount;
 						i.setAmount(balance);
 						System.out.println("Please collect your cash from the dispenser.");
-						status = "Success";
 						System.out.println(i.toString());
 					} else {
 						System.out.println("Insufficeint Balance.");
-						status = "Failed";
 						break;
 					}
 				}
@@ -157,7 +155,7 @@ public class Main {
 				}
 
 				if (balance >= 0) {
-					TransactionHistory trans = new TransactionHistory(id, transaction_type1, wid_amount, balance, status);
+					TransactionHistory trans = new TransactionHistory(id, transaction_type1, wid_amount, balance,status);
 					transaction.add(trans);
 					last = transaction.get(transaction.size() - 1);
 					System.out.println(last.toString());
