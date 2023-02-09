@@ -108,6 +108,7 @@ public class Main {
 						balance += dep_amount;
 						i.setAmount(balance);
 						System.out.println("Amount deposited successfully.");
+						status = "Success";
 						System.out.println(i.toString());
 						break;
 					}
