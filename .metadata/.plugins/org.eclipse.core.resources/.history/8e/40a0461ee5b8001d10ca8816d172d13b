@@ -1,0 +1,55 @@
+package ThreadAndTransaction;
+
+import java.time.LocalDate;
+import java.util.*;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class TTMain {
+
+	static MongoClient mc = null;
+	static MongoDatabase db = null;
+
+	public static void Connection() {
+		try {
+			String uri = "mongodb+srv://mathesh:okw1D2c6n0p3mphr@pilot.elauiph.mongodb.net/?retryWrites=true&w=majority";
+			MongoClient mc = MongoClients.create(uri);
+			db = mc.getDatabase("Lantrasoft_bank");
+			System.out.println("DATABASE IS CONNECTED.");
+		} catch (Exception e) {
+			System.err.println(e);
+			System.out.println("DATABASE CONNECTION FAILED.");
+		}
+
+	}
+
+	public static void CreateAccount() {
+		MongoCollection<Document> customer_collection = db.getCollection("Customers");
+		customer_collection.insertOne(new Document().append("Customer", c));
+	}
+
+	public static void main(String[] args) {
+		Connection();
+		Scanner in = new Scanner(System.in);
+		while (true) {
+			System.out.println("To create an account --- Enter 1\nFor banking --- Enter 2\nFor UPI --- Enter 3");
+			int method = in.nextInt();
+			switch (method) {
+			case 1:
+				CreateAccount();
+				break;
+
+			case 2:
+			}
+		}
+		in.close();
+		mc.close();
+
+	}
+
+}

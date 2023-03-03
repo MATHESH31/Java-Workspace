@@ -1,0 +1,75 @@
+package ThreadAndTransaction;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class TTMain {
+
+	static MongoClient mc = null;
+	static MongoDatabase db = null;
+	
+	static Scanner in = new Scanner(System.in);
+
+	public static void Connection() {
+		try {
+			String uri = "mongodb+srv://mathesh:okw1D2c6n0p3mphr@pilot.elauiph.mongodb.net/?retryWrites=true&w=majority";
+			MongoClient mc = MongoClients.create(uri);
+			db = mc.getDatabase("Lantrasoft_bank");
+			System.out.println("DATABASE IS CONNECTED.");
+		} catch (Exception e) {
+			System.err.println(e);
+			System.out.println("DATABASE CONNECTION FAILED.");
+		}
+
+	}
+
+	public static void CreateAccount() throws ParseException {
+		MongoCollection<Document> customer_collection = db.getCollection("Customers");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd H:m:s");
+		
+		System.out.println("Enter your name : ");
+		String name = in.nextLine();
+		System.out.println("Enter your name : ");
+		String account_id = in.nextLine();
+		System.out.println("Enter your name : ");
+		String account_type = in.nextLine(); 
+		System.out.println("Enter your name : ");
+		String branch = in.nextLine();
+		System.out.println("Enter your name : ");
+		String pan_id = in.nextLine();
+		System.out.println("Enter your name : ");
+		Date dOB = dateFormat.parse(in.nextLine());
+		System.out.println("Enter your name : ");
+		Long phone = in.nextLong();
+		System.out.println("Enter your name : ");
+		String address = in.nextLine();
+		System.out.println("Enter your name : ");
+		int balance = in.nextInt();
+		customer_collection.insertOne(null);
+	}
+
+	public static void main(String[] args) {
+		Connection();
+		while (true) {
+			System.out.println("To create an account --- Enter 1\nFor banking --- Enter 2\nFor UPI --- Enter 3");
+			int method = in.nextInt();
+			switch (method) {
+			case 1:
+				CreateAccount();
+				break;
+
+			case 2:
+			}
+		}
+	}
+
+}

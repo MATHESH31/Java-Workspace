@@ -1,0 +1,41 @@
+package ThreadAndTransaction;
+
+import java.util.Iterator;
+
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class TTMain {
+	static String uri = "mongodb+srv://mathesh:okw1D2c6n0p3mphr@pilot.elauiph.mongodb.net/?retryWrites=true&w=majority";
+	MongoClient mc = MongoClients.create(uri);
+	MongoDatabase db = mc.getDatabase("Lantrasoft_bank");
+
+	public static void Upi() {
+		
+	}
+
+	public static void main(String[] args) {
+		try {
+			MongoClient mc = MongoClients.create(uri);
+			MongoDatabase db = mc.getDatabase("Lantrasoft_bank");
+			System.out.println("Database is connected.");
+			MongoCollection<Document> customer_collection = db.getCollection("Customers");
+			MongoCollection<Document> transaction_collection = db.getCollection("Transaction");
+			
+			
+			mc.close();
+		}catch(
+
+	Exception e)
+	{
+		System.err.println(e);
+	}
+
+}
+
+}

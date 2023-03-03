@@ -1,0 +1,36 @@
+package ThreadAndTransaction;
+
+import java.util.Iterator;
+
+import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class TTMain {
+	static String uri = "mongodb+srv://myAtlasDBUser:<password>@pilot.elauiph.mongodb.net/?retryWrites=true&w=majority";
+
+//	public static void 
+
+	public static void main(String[] args) {
+		try {
+			MongoClient mc = MongoClients.create(uri);
+			MongoDatabase db = mc.getDatabase("Lantrasoft_bank");
+			System.out.println("Database is connected.");
+			MongoCollection<Document> col = db.getCollection("Customers");
+			FindIterable<Document> doc = col.find();
+			Iterator<Document> it = doc.iterator();
+			while (it.hasNext()) {
+				System.out.println(it.next());
+			}
+			mc.close();
+		} catch (Exception e) {
+			System.err.println(e);
+		}
+
+	}
+
+}

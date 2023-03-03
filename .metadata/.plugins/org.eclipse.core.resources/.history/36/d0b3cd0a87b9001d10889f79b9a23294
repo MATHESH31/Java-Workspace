@@ -1,0 +1,97 @@
+package ThreadAndTransaction;
+
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.*;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class TTMain {
+
+	static MongoClient mc = null;
+	static MongoDatabase db = null;
+
+	static Scanner in = new Scanner(System.in);
+
+	public static void Connection() {
+		try {
+			String uri = "mongodb+srv://mathesh:okw1D2c6n0p3mphr@pilot.elauiph.mongodb.net/?retryWrites=true&w=majority";
+			MongoClient mc = MongoClients.create(uri);
+			db = mc.getDatabase("Lantrasoft_bank");
+			System.out.println("DATABASE IS CONNECTED.");
+		} catch (Exception e) {
+			System.err.println(e);
+			System.out.println("DATABASE CONNECTION FAILED.");
+		}
+
+	}
+
+	public static Document file(String name, String account_id, String account_type, String branch, String pan_id,
+			LocalDate dOB, long phone, String address, int balance) {
+		Document doc = new Document("Name", name).append("Account_id", account_id).append("Account_type", account_type)
+				.append("Branch", branch).append("Pan_id", pan_id).append("DOB", dOB).append("Phone", phone)
+				.append("Address", address).append("Balance", balance);
+		return doc;
+	}
+
+	public static void CreateAccount() throws ParseException {
+		MongoCollection<Document> customer_collection = db.getCollection("Customers");
+		System.out.println("Enter your name : ");
+		String name = in.nextLine();
+		System.out.println("Enter your account type(Savings / Current) : ");
+		String account_type = in.nextLine();
+		System.out.println("Enter your branch : ");
+		String branch = in.nextLine();
+		System.out.println("Enter your DOB(YYYY-MM-DD) : ");
+		String[] temp_date = in.nextLine().split("-");
+		LocalDate dOB = LocalDate.of(Integer.parseInt(temp_date[0]),Integer.parseInt(temp_date[1]),Integer.parseInt(temp_date[2]));
+		System.out.println("Enter your phone number : ");
+		Long phone = in.nextLong();
+		System.out.println("Enter your address : ");
+		String address = in.nextLine();
+		int balance = 0;
+		String account_id = "LSB" + Long.toString(phone).substring(6, 10);
+		String pan_id = name.substring(0, 3) + Long.toString(phone).substring(0, 4);
+		customer_collection.insertOne(file(name,account_id,account_type,branch,pan_id,dOB,phone,address,balance));
+		System.out.println("Your Account has been created.");
+	}
+
+	public static void main(String[] args) throws ParseException {
+		boolean process = true;
+		Connection();
+		while (process) {
+			System.out.println("To create an account --- Enter 1\nFor banking --- Enter 2\nFor UPI --- Enter 3");
+			int method = in.nextInt();
+			switch (method) {
+			case 1:
+				CreateAccount();
+				break;
+
+			case 2:
+				
+				break;
+					
+			case 3:
+				
+				break;
+				
+			case 4:
+				
+				break;
+				
+			case 0:
+				process = false;
+				break;
+				
+			default:
+				System.out.println("Please enter a valid option.");
+			}
+		}
+	}
+
+}

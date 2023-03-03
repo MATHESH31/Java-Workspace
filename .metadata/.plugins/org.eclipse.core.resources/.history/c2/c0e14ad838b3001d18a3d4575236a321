@@ -1,0 +1,195 @@
+package DB_Java;
+
+import java.util.*;
+import java.sql.*;
+
+public class H2Java {
+	static Scanner in = new Scanner(System.in);
+	static Connection c = null;
+	static List<Integer> ids = new ArrayList<>();
+
+	public static long PhoneNumber() {
+
+		long a = 0;
+		try {
+			a = in.nextLong();
+			in.nextLine();
+		} catch (Exception e) {
+			System.out.print("Please enter a number : ");
+			a = number();
+		}
+		return a;
+	}
+
+	public static int number() {
+
+		int a = 0;
+		try {
+			a = in.nextInt();
+			in.nextLine();
+		} catch (Exception e) {
+			System.out.print("Please enter a number : ");
+			a = number();
+		}
+		return a;
+	}
+
+	public static String string() {
+		String a = "";
+		try {
+			a = in.nextLine();
+		} catch (Exception e) {
+			System.out.print("Please enter a string : ");
+			a = string();
+		}
+		return a;
+	}
+
+	public static void Operations() throws SQLException {
+		List<Integer> ids = new ArrayList<>();
+		boolean flag = true;
+		boolean id_check = true;
+		while (flag) {
+			System.out.println(
+					"Enter 1 to Insert data.\nEnter 2 to Read data.\nEnter 3 to Update data.\nEnter 4 to Delete data.\nEnter 0 to exit");
+			System.out.print("Enter your choice : ");
+			int ent_op = in.nextInt();
+			in.nextLine();
+
+			switch (ent_op) {
+			case 1:
+				System.out.print("Enter id : ");
+				int id = number();
+				while (id_check) {
+					System.out.println("while works.");
+					if (ids.contains(id)) {
+						System.out.println("if works.");
+						System.out.println("THIS ID EXIST.");
+						id = (int) number();
+					} else {
+						System.out.println("else works.");
+						id_check = false;
+					}
+				}
+				ids.add(id);
+				System.out.println(ids);
+				System.out.print("Enter name : ");
+				String name = string();
+				System.out.print("Enter age : ");
+				int Age = number();
+				System.out.print("Enter phone : ");
+				long phone = PhoneNumber();
+				System.out.print("Enter address : ");
+				String address = string();
+
+				c.createStatement().executeUpdate("INSERT INTO COMPANY (ID,Name,Age,phone,Address) VALUES ('" + id
+						+ "','" + name + "','" + Age + "','" + phone + "','" + address + "');");
+
+				System.out.println("Data has been inserted.");
+				break;
+
+			case 2:
+				ResultSet temp = c.createStatement().executeQuery("SELECT * FROM Company;");
+				while (temp.next()) {
+					System.out.println("ID = " + temp.getInt("ID"));
+					System.out.println("Name = " + temp.getString("Name"));
+					System.out.println("Age = " + temp.getInt("Age"));
+					System.out.println("Phone = " + temp.getLong("phone"));
+					System.out.println("Address = " + temp.getString("Address"));
+					System.out.println();
+				}
+				break;
+
+			case 3:
+				System.out.print("Enter the ID : ");
+				id = number();
+				if (ids.contains(Integer.valueOf(id))) {
+					System.out.print("Enter field to be updated : ");
+					String upd_field = string();
+
+					if (upd_field.equals("name")) {
+						System.out.print("Enter updated name : ");
+						name = string();
+						c.createStatement()
+								.executeUpdate("UPDATE Compnay SET Name = '" + name + "' WHERE ID = '" + id + "';");
+					} else if (upd_field.equals("age")) {
+						System.out.print("Enter updated age : ");
+						Age = number();
+						c.createStatement()
+								.executeUpdate("UPDATE Company SET Age = '" + Age + "' WHERE ID = '" + id + "';");
+					} else if (upd_field.equals("phone")) {
+						System.out.print("Enter updated phone : ");
+						phone = PhoneNumber();
+						c.createStatement()
+								.executeUpdate("UPDATE Company SET phone = '" + phone + "' WHERE ID = '" + id + "';");
+					} else if (upd_field.equals("address")) {
+						System.out.print("Enter updated address : ");
+						address = string();
+						c.createStatement().executeUpdate(
+								"UPDATE Company SET Address = '" + address + "' WHERE ID = '" + id + "';");
+					} else {
+						System.out.println("Please enter correct field");
+					}
+				} else {
+					System.out.println("ID DOESNT EXIST.");
+				}
+
+				break;
+
+			case 4:
+				System.out.print("Enter ID to delete : ");
+				id = number();
+				if (ids.contains(Integer.valueOf(id))) {
+					c.createStatement().executeUpdate("DELETE FROM Company WHERE ID = '" + id + "' ");
+				} else {
+					System.out.println("ID DOESNT EXIST.");
+				}
+				break;
+
+			case 0:
+				flag = false;
+				break;
+
+			default:
+				System.out.println("Please check your input.");
+			}
+
+		}
+
+	}
+
+	public static void main(String[] args) throws SQLException {
+		try {
+			Class.forName("org.h2.Driver");
+			c = DriverManager.getConnection("jdbc:h2:~/test", "Lantrasoft", "12345");
+			System.out.println("Database is connected.");
+
+			ResultSet table = c.getMetaData().getTables(null, null, "COMPANY", null);
+			if (table.next()) {
+				ResultSet identity = c.createStatement().executeQuery("SELECT ID FROM COMPANY;");
+				while (identity.next()) {
+					if (identity.wasNull()) {
+						break;
+					} else {
+						ids.add(identity.getInt("ID"));
+					}
+				}
+				System.out.println(ids);
+				Operations();
+				in.close();
+				c.close();
+			} else {
+				System.out.println("THE TABEL DOESNT EXIST.\nCREATING TABLE COMPANY.");
+				c.createStatement().execute(
+						"CREATE TABLE COMPANY(ID INT PRIMARY KEY, NAME VARCHAR(50), AGE INT, PHONE BIGINT, ADDRESS TEXT);");
+				Operations();
+				in.close();
+				c.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + " : " + e.getMessage());
+			System.exit(0);
+		}
+	}
+}

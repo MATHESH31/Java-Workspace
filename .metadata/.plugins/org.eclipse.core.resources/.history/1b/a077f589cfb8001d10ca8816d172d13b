@@ -1,0 +1,29 @@
+package ThreadAndTransaction;
+
+import java.util.Date;
+
+public class Customer {
+
+	private String Name;
+	private String Account_id;
+	private String Account_type;
+	private String Branch;
+	private String Pan_id;
+	private Date DOB;
+	private Long phone;
+	private String Address;
+	private int Balance;
+
+	public Customer(String name, String account_id, String account_type, String branch, String pan_id, Date dOB,
+			Long phone, String address, int balance) {
+		Name = name;
+		Account_id = account_id;
+		Account_type = account_type;
+		Branch = branch;
+		Pan_id = pan_id;
+		DOB = dOB;
+		this.phone = phone;
+		Address = address;
+		Balance = balance;
+	}
+}

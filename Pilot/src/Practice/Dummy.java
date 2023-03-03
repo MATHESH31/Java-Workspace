@@ -1,42 +1,29 @@
 package Practice;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
 
 public class Dummy {
 
 	public static void main(String[] args) {
-		String input="Reya is is the the best player in eye eye game";
-	    String output = "";
-	    Pattern p = Pattern.compile("\\b(\\w+)\\b\\s+\\b\\1\\b", Pattern.MULTILINE+Pattern.CASE_INSENSITIVE);
-	    Matcher m = p.matcher(input);
-	    System.out.println(m);
-	    if (!m.find())
-	        output = "No duplicates found, no changes made to data";
-	    else
-	    {
-	        while (m.find())
-	        {
-	            if (output == "") {
-	                output = input.replaceFirst(m.group(), m.group(1));
-	            } else {
-	                output = output.replaceAll(m.group(), m.group(1));
-	            }
-	        }
-	        input = output;
-	        m = p.matcher(input);
-	        while (m.find())
-	        {
-	            output = "";
-	            if (output == "") {
-	                output = input.replaceAll(m.group(), m.group(1));
-	            } else {
-	                output = output.replaceAll(m.group(), m.group(1));
-	            }
-	        }
-	    }
-	    System.out.println("After removing duplicate the final string is " + output);
-
+//		Set<Integer> ids = new HashSet<Integer>();
+//		ids.add(123);
+//		int id = 123;
+//		try {
+//			ids.add(id);
+//		} catch (Exception e) {
+//			System.out.println("THIS ID EXIST");
+//		}
+		Scanner sc = new Scanner(System.in);
+		ArrayList<Integer> a = new ArrayList<>();
+		
+		
+		int b = sc.nextInt();
+		
+		if(a.contains(b)) {
+			System.out.println("rgftws");
+		}
+		sc.close();
+		
 	}
 
 }
