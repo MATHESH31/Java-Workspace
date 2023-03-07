@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import org.bson.Document;
-
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -15,8 +15,13 @@ import java.util.logging.Level;
 
 public class TTMain {
 
-	static MongoClient mc = null;
-	static MongoDatabase db = null;
+	static MongoClient mc;
+	static MongoDatabase db;
+	static String account_id;
+	static String holder_name;
+	static int amount;
+	static int current_balance;
+	static List<Document> auth_lis = new ArrayList<>();
 
 	static Scanner in = new Scanner(System.in);
 
@@ -34,24 +39,42 @@ public class TTMain {
 	}
 
 	public static Document CreateAccountfile(String name, String account_id, String account_type, String branch,
-			String pan_id, LocalDate dOB, long phone, String address, int balance) {
-		Document doc = new Document("Name", name).append("Account_id", account_id).append("Account_type", account_type)
-				.append("Branch", branch).append("Pan_id", pan_id).append("DOB", dOB).append("Phone", phone)
-				.append("Address", address).append("Balance", balance);
-		return doc;
+			String pan_id, LocalDate dOB, long phone, String address, int balance, int pin) {
+		Document cus_doc = new Document("Name", name).append("Account_id", account_id)
+				.append("Account_type", account_type).append("Branch", branch).append("Pan_id", pan_id)
+				.append("DOB", dOB).append("Phone", phone).append("Address", address).append("Balance", balance)
+				.append("PIN", pin);
+		return cus_doc;
+	}
+
+	public static Document Transaction(String name, String account_id, LocalDate date, int amount, int balance) {
+		Document bank_doc = new Document("Name", name).append("Account_id", account_id)
+				.append("Date_Time_Of_transaction", date).append("Amount", amount).append("Balance", balance);
+		return bank_doc;
+
 	}
 
 	public static boolean Authentication() {
-		
+		MongoCollection<Document> customer_collection = db.getCollection("Customers");
+
 		System.out.println("Enter your Account_id : ");
-		String account_id = in.nextLine();
+		account_id = in.nextLine();
 		System.out.println("Enter your PIN : ");
 		int pin = in.nextInt();
 		in.nextLine();
-		
-		return
+		List<Document> auth_lis = customer_collection
+				.aggregate(Arrays
+						.asList(new Document("$match", new Document("Account_id", account_id).append("PIN", pin))))
+				.into(new ArrayList<>());
+		if (auth_lis.size() > 0) {
+			holder_name = auth_lis.get(0).getString("Name");
+			current_balance = auth_lis.get(0).getInteger("Balance");
+			return true;
+		} else {
+			return false;
+		}
 	}
-	
+
 	public static void CreateAccount() throws ParseException {
 		MongoCollection<Document> customer_collection = db.getCollection("Customers");
 
@@ -71,29 +94,73 @@ public class TTMain {
 		System.out.println("Enter your address : ");
 		String address = in.nextLine();
 		int balance = 0;
-		String account_id = "LSB" + Long.toString(phone).substring(6, 10);
+		int pin = in.nextInt();
+		account_id = "LSB" + Long.toString(phone).substring(6, 10);
 		String pan_id = name.substring(0, 3) + Long.toString(phone).substring(0, 4);
 		customer_collection.insertOne(
-				CreateAccountfile(name, account_id, account_type, branch, pan_id, dOB, phone, address, balance));
+				CreateAccountfile(name, account_id, account_type, branch, pan_id, dOB, phone, address, balance, pin));
 		System.out.println("Your Account has been created.");
 	}
 
 	public static void Banking() {
-		boolean Level2 = true;		
-		
-		
-		
-		while (Level2) {
-			System.out.println(
-					"To deposit --- Enter 1\nTo Withdraw --- Enter 2\nTo see Transactions --- Enter 3\nTo go back --- Enter 0\n");
-			System.out.print("Your choice : ");
-			int operation = in.nextInt();
-			in.nextLine();
-			switch (operation) {
-			case 1:
-				
+		MongoCollection<Document> customer_collection = db.getCollection("Customers");
+		MongoCollection<Document> customer_transaction = db.getCollection("Transactions");
+
+		boolean Level2 = true;
+		BasicDBObject match = new BasicDBObject();
+		BasicDBObject update = new BasicDBObject();
+		BasicDBObject set = new BasicDBObject();
+
+		if (Authentication() == true) {
+			while (Level2) {
+				System.out.println(
+						"To deposit --- Enter 1\nTo Withdraw --- Enter 2\nTo see Transactions --- Enter 3\nTo go back --- Enter 0\n");
+				System.out.print("Your choice : ");
+				int operation = in.nextInt();
+				in.nextLine();
+				switch (operation) {
+				case 1:
+					System.out.print("Enter amount to deposit : ");
+					amount = in.nextInt();
+					in.nextLine();
+					match.put("Account_id", account_id);
+					update.put("Balance", amount);
+					set.put("$set", update);
+					customer_collection.updateOne(match, set);
+					customer_transaction.insertOne(Transaction(holder_name,account_id,LocalDate.now(),amount,current_balance+amount));
+					System.out.println("Amount is credited.");
+					break;
+
+				case 2:
+					System.out.print("Enter amount to widthdraw : ");
+					amount = in.nextInt();
+					in.nextLine();
+					match.put("Account_id", account_id);
+					update.put("Balance", amount);
+					set.put("$set", update);
+					customer_collection.updateOne(match, set);
+					customer_transaction.insertOne(Transaction(holder_name,account_id,LocalDate.now(),amount,current_balance-amount));
+					System.out.println("Amount is debited.");
+					break;
+
+				case 3:
+
+					break;
+
+				case 0:
+					Level2 = false;
+					break;
+
+				default:
+					System.out.println("Please enter a valid option.");
+					break;
+				}
 			}
+		} else {
+			System.out.println("Authentication Failed....");
+			Banking();
 		}
+		auth_lis.clear();
 
 	}
 
@@ -103,7 +170,8 @@ public class TTMain {
 		boolean Level1 = true;
 		Connection();
 		while (Level1) {
-			System.out.println("To create an account --- Enter 1\nFor banking --- Enter 2\nFor UPI --- Enter 3\n");
+			System.out.println(
+					"To create an account --- Enter 1\nFor banking --- Enter 2\nFor UPI --- Enter 3\nTo Exit -- Enter 0");
 			System.out.print("Your choice : ");
 			int process = in.nextInt();
 			in.nextLine();
@@ -113,7 +181,7 @@ public class TTMain {
 				break;
 
 			case 2:
-
+				Banking();
 				break;
 
 			case 3:
@@ -121,7 +189,7 @@ public class TTMain {
 				break;
 
 			case 0:
-				process = false;
+				Level1 = false;
 				System.out.println("Database is safely disconnected.");
 				break;
 
